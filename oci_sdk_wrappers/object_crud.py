@@ -6,7 +6,7 @@ import oci
 from oci.object_storage.models import CreateBucketDetails
 
 class ObjectCrud:
-    def __init__(self, config_filename):
+    def __init__(self, config_filename = None):
         config_filename = config_filename or "~/.oci/config"
         self.config = oci.config.from_file(config_filename)
         self.compartment_id = self.config["tenancy"] # self.config["bucket_compartment"] # self.config["tenancy"]

@@ -20,7 +20,7 @@ from base64 import b64encode, b64decode
 # Usage : python stream_example.py <compartment id>
 
 class StreamWrapper:
-    def __init__(self, STREAM_NAME, PARTITIONS, compartment_ocid, config_filename):
+    def __init__(self, STREAM_NAME, PARTITIONS, compartment_ocid, config_filename = None):
         STREAM_NAME = STREAM_NAME or "SdkExampleStream"
         PARTITIONS = PARTITIONS or 1
 
@@ -125,9 +125,8 @@ class StreamWrapper:
             # Process the messages
             print(" Read {} messages".format(len(get_response.data)))
             for message in get_response.data:
-                # print("cursor:", b64decode(cursor.encode()).decode())
-                print("message:", message)
-                print("decoded message value: {}".format(b64decode(message.value.encode()).decode()))
+                # print("message:", message)
+                # print("decoded message value: {}".format(b64decode(message.value.encode()).decode()))
                 yield message
 
             # get_messages is a throttled method; clients should retrieve sufficiently large message

@@ -3,7 +3,7 @@ from base64 import b64encode, b64decode
 import csv
 from oci_sdk_wrappers import StreamWrapper
 
-# this is a demo of how to publish some dummy data to a stream in Oracle Streaming Analytics
+# this is a demo of how to publish some dummy data to a stream in Oracle Streaming Service
 def publish_csv_messages(client, stream_id):
     message_list = []
     with open('mtlukens20190531.csv') as csvfile:
@@ -30,7 +30,7 @@ def publish_csv_messages(client, stream_id):
 
 
 # create return stream wrapper from StreamExample instance
-publish_sw = StreamWrapper('InfomgtStreamsDemo', 1, 'ocid1.compartment.oc1..aaaaaaaa7lawiz4jty5scuoalmy7hxnscsx2llbdmxzs3xbak4gpmtb4vyda', None)
+publish_sw = StreamWrapper('InfomgtStreamsDemo', 1, 'ocid1.compartment.oc1..aaaaaaaa7lawiz4jty5scuoalmy7hxnscsx2llbdmxzs3xbak4gpmtb4vyda')
 
 # Publish some messages to the stream
 publish_csv_messages(publish_sw.stream_client, publish_sw.s_id)
