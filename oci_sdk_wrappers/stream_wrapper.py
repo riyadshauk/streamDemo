@@ -41,7 +41,7 @@ class StreamWrapper:
         stream = self.get_or_create_stream(stream_admin_client, self.compartment, STREAM_NAME,
                                     PARTITIONS, stream_admin_client_composite).data
 
-        print(" Created Stream {} with id : {}".format(stream.name, stream.id))
+        print("Created (or using already created) Stream {} with id : {}".format(stream.name, stream.id))
 
         # Streams are assigned a specific endpoint url based on where they are provisioned.
         # Create a stream client using the provided message endpoint.
@@ -80,8 +80,8 @@ class StreamWrapper:
             sid = list_streams.data[0].id
             return self.get_stream(sac_composite.client, sid)
 
-        print(" No Active stream  {} has been found; Creating it now. ".format(stream_name))
-        print(" Creating stream {} with {} partitions.".format(stream_name, partition))
+        print("No Active stream  {} has been found; Creating it now.".format(stream_name))
+        print("Creating stream {} with {} partitions.".format(stream_name, partition))
 
         # Create stream_details object that need to be passed while creating stream.
         stream_details = oci.streaming.models.CreateStreamDetails(name=stream_name, partitions=partition,
@@ -98,8 +98,8 @@ class StreamWrapper:
 
 
     def delete_stream(self, client, stream_id):
-        print(" Deleting Stream {}".format(stream_id))
-        print("  Stream deletion is an asynchronous operation, give it some time to complete.")
+        print("Deleting Stream {}".format(stream_id))
+        print("Stream deletion is an asynchronous operation, give it some time to complete.")
         client.delete_stream_and_wait_for_state(stream_id, wait_for_states=[oci.streaming.models.StreamSummary.LIFECYCLE_STATE_DELETED])
 
 
@@ -113,17 +113,17 @@ class StreamWrapper:
         return cursor
 
 
-    def simple_message_loop(self, client, stream_id, initial_cursor):
+    def simple_message_loop(self, client, stream_id, initial_cursor, limit):
         cursor = initial_cursor
         while True:
-            get_response = client.get_messages(stream_id, cursor, limit=96)
+            get_response = client.get_messages(stream_id, cursor, limit=limit)
             # No messages to process. return.
             if not get_response.data:
                 pass
                 # return
 
             # Process the messages
-            print(" Read {} messages".format(len(get_response.data)))
+            print("Read {} messages".format(len(get_response.data)))
             for message in get_response.data:
                 # print("message:", message)
                 # print("decoded message value: {}".format(b64decode(message.value.encode()).decode()))
@@ -137,7 +137,7 @@ class StreamWrapper:
 
 
     def get_cursor_by_group(self, sc, sid, group_name, instance_name):
-        print(" Creating a cursor for group {}, instance {}".format(group_name, instance_name))
+        print("Creating a cursor for group {}, instance {}".format(group_name, instance_name))
         cursor_details = oci.streaming.models.CreateGroupCursorDetails(group_name=group_name, instance_name=instance_name,
                                                                     type=oci.streaming.models.
                                                                     CreateGroupCursorDetails.TYPE_TRIM_HORIZON,
